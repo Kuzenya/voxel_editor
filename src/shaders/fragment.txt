@@ -1,0 +1,25 @@
+#version 330 core
+
+in vec3 fragNormal;
+in vec3 fragPos;
+
+out vec4 FragColor;
+
+uniform vec3 lightPos = vec3(2.0, 4.0, 2.0);
+uniform vec3 lightColor = vec3(1.0, 1.0, 1.0);
+
+// Новый материал — то, что устанавливается из Material.use()
+uniform vec4 materialColor;
+
+void main()
+{
+    vec3 normal = normalize(fragNormal);
+    vec3 lightDir = normalize(lightPos - fragPos);
+
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    // RGB материала участвует в освещении
+    vec3 color = materialColor.rgb * diff * lightColor;
+
+    FragColor = vec4(color, materialColor.a);
+}
